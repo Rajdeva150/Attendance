@@ -1,0 +1,78 @@
+# DutyLog — Attendance & Salary Tracker
+
+Single-file HTML app to track hourly attendance, OT, and leave, with automatic
+salary calculation. Built to be wrapped into an Android APK using Capacitor.
+
+File: `attendance_app.html`
+
+---
+
+## Features
+
+- **Attendance tab**
+  - Add entries as **Duty**, **Leave**, or **Emergency Leave**
+  - Duty entries: In-time + Out-time → duty hours auto-calculated
+  - OT hours entered manually per duty entry
+  - Optional note per entry
+  - Edit and delete any saved entry
+- **Settings tab**
+  - Set Hourly Rate (₹/hour)
+  - Set separate OT Hourly Rate (₹/hour) — defaults to hourly rate if left blank
+  - Export full backup as a `.json` file
+  - Delete all data (with confirmation)
+- **Summary tab**
+  - Totals: duty days, total duty hours, total OT hours, leave days, emergency leave days, total salary
+  - Full date-wise table: hours, OT, and ₹ salary per entry
+  - Share button — sends a text summary via WhatsApp/any app (or copies to clipboard if sharing isn't supported)
+- **Data storage**: everything is saved automatically in the device's local storage — no internet or server needed. Data stays on the phone even after closing the app.
+
+---
+
+## How salary is calculated
+
+For each Duty entry:
+
+```
+duty hours = Out time − In time  (auto)
+salary     = (duty hours × hourly rate) + (OT hours × OT rate)
+```
+
+Leave and Emergency Leave entries are counted separately in the totals but do not add to salary.
+
+---
+
+## Building the APK (Capacitor)
+
+1. Install Node.js if not already installed.
+2. Create a Capacitor project (one-time setup):
+   ```
+   npm init -y
+   npm install @capacitor/core @capacitor/android
+   npm install -D @capacitor/cli
+   npx cap init "DutyLog" "com.vks.dutylog" --web-dir=www
+   ```
+3. Copy the app into the web folder:
+   ```
+   mkdir www
+   cp attendance_app.html www/index.html
+   ```
+4. Add the Android platform and sync:
+   ```
+   npx cap add android
+   npx cap sync
+   ```
+5. Open in Android Studio and build the APK:
+   ```
+   npx cap open android
+   ```
+   In Android Studio: **Build → Build Bundle(s) / APK(s) → Build APK(s)**
+
+The generated APK will be under `android/app/build/outputs/apk/`.
+
+---
+
+## Notes
+
+- Package name used above (`com.vks.dutylog`) can be changed to whatever you prefer — keep it consistent if you rebuild later, or the app will install as a separate copy.
+- App icon and splash screen can be set later using `npx cap` icon/splash tools or by replacing files under `android/app/src/main/res/`.
+- To back up or move data to a new phone, use **Settings → Export Backup** to download the `.json` file.

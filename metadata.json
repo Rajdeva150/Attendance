@@ -1,0 +1,6 @@
+{
+  "name": "DutyLog",
+  "description": "Attendance and hourly salary manager with overtime tracking, shift calculation, and earnings summary.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
